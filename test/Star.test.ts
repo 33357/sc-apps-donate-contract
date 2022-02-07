@@ -1,10 +1,11 @@
 import { expect } from 'chai';
-import { ethers, getNamedAccounts} from 'hardhat';
+import { ethers, getNamedAccounts } from 'hardhat';
 import { BigNumber, Signer } from 'ethers';
 import pino from 'pino';
 import { Star, ERC20TEST } from '../typechain';
 
 const Logger = pino();
+const ZERO_ADDRESS = '0000000000000000000000000000000000000000';
 
 describe('test Star', function () {
   let deployer: Signer;
@@ -35,31 +36,36 @@ describe('test Star', function () {
       expect(await star.minDonate()).eq((10 ** 16).toString());
       expect(await star.name()).eq("SC_APPS_STAR");
       expect(await star.symbol()).eq("Star");
-      expect(await star.reward()).eq(1000000);
+      expect(await star.reward()).eq(100000000);
       expect(await star.rewardBase()).eq(10000);
     });
 
     it('check donate', async function () {
-      let value = BigNumber.from((10 ** 18).toString());
+      let value = BigNumber.from((10 ** 16).toString());
       let answer = value.mul(await star.reward()).div(await star.rewardBase());
-      await star.donate(answer,{value});
-      expect(await star.reward()).eq(BigNumber.from(1000000).mul(996).div(1000))
+      let reward = await star.reward();
+      await star.connect(deployer).donate(answer, { value });
+      expect(await star.balanceOf(await deployer.getAddress())).eq(answer);
+      expect(await star.reward()).eq(reward.mul(996).div(1000));
+      expect(await ethers.provider.getBalance(ZERO_ADDRESS)).eq(BigNumber.from(0));
+      await star.connect(deployer).get(ZERO_ADDRESS);
+      expect(await ethers.provider.getBalance(ZERO_ADDRESS)).eq(value);
 
       value = BigNumber.from((10 ** 18).toString()).add(1);
       answer = value.mul(await star.reward()).div(await star.rewardBase());
-      await expect(star.donate(answer,{value})).revertedWith(
+      await expect(star.donate(answer, { value })).revertedWith(
         'Star: error value'
       );
 
       value = BigNumber.from((10 ** 16).toString()).sub(1);
       answer = value.mul(await star.reward()).div(await star.rewardBase());
-      await expect(star.donate(answer,{value})).revertedWith(
+      await expect(star.donate(answer, { value })).revertedWith(
         'Star: error value'
       );
 
       value = BigNumber.from((10 ** 18).toString());
       answer = value;
-      await expect(star.donate(answer,{value})).revertedWith(
+      await expect(star.donate(answer, { value })).revertedWith(
         'Star: error answer'
       );
     });

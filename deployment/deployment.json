@@ -1,12 +1,22 @@
 {
+  "1": {
+    "Star": {
+      "proxyAddress": "0x61B27d2a3cCFD309D8D2F15B132d16733448AB88",
+      "implAddress": "0x61B27d2a3cCFD309D8D2F15B132d16733448AB88",
+      "version": "1.0.0",
+      "contract": "Star",
+      "operator": "0x390CA69d27b2Dd84C4E7D938DdA52F0A3a4Fbf5F",
+      "fromBlock": 14158888
+    }
+  },
   "4": {
     "Star": {
-      "proxyAddress": "0x6Bc7e66fE41f19E2d5AfbD7a5B931697322c1783",
-      "implAddress": "0x6Bc7e66fE41f19E2d5AfbD7a5B931697322c1783",
+      "proxyAddress": "0x4952648f8144b37aE66B47b49b18dA6DEe77b8Cb",
+      "implAddress": "0x4952648f8144b37aE66B47b49b18dA6DEe77b8Cb",
       "version": "1.0.0",
       "contract": "Star",
       "operator": "0x3eA0949424eBB2A3d311a943e53773CB05C4BE3e",
-      "fromBlock": 10126740
+      "fromBlock": 10127568
     }
   }
 }
